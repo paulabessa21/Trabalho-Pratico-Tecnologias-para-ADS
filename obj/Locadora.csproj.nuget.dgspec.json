@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\paula\\OneDrive\\Desktop\\Locadora\\Locadora.csproj": {}
+    "C:\\Users\\paula\\OneDrive\\Desktop\\Trabalho-Pratico-Tecnologias-para-ADS\\Locadora.csproj": {}
   },
   "projects": {
-    "C:\\Users\\paula\\OneDrive\\Desktop\\Locadora\\Locadora.csproj": {
+    "C:\\Users\\paula\\OneDrive\\Desktop\\Trabalho-Pratico-Tecnologias-para-ADS\\Locadora.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\paula\\OneDrive\\Desktop\\Locadora\\Locadora.csproj",
+        "projectUniqueName": "C:\\Users\\paula\\OneDrive\\Desktop\\Trabalho-Pratico-Tecnologias-para-ADS\\Locadora.csproj",
         "projectName": "Locadora",
-        "projectPath": "C:\\Users\\paula\\OneDrive\\Desktop\\Locadora\\Locadora.csproj",
+        "projectPath": "C:\\Users\\paula\\OneDrive\\Desktop\\Trabalho-Pratico-Tecnologias-para-ADS\\Locadora.csproj",
         "packagesPath": "C:\\Users\\paula\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\paula\\OneDrive\\Desktop\\Locadora\\obj\\",
+        "outputPath": "C:\\Users\\paula\\OneDrive\\Desktop\\Trabalho-Pratico-Tecnologias-para-ADS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -63,6 +63,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.11, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[7.2.0, )"
             }
           },
           "imports": [
