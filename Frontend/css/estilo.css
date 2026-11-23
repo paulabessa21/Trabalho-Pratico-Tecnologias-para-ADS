@@ -1,0 +1,120 @@
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('../vendor/fonts/archivo-latin-wdth-normal.woff2') format('woff2');
+}
+
+/* Cores: asfalto, azul de placa de trânsito e o amarelo da faixa da pista */
+:root {
+  --asfalto: #1a2430;
+  --azul: #0f4c81;
+  --azul-escuro: #f4f6f8;
+  --faixa: #ffc629;
+  --papel: #f4f6f8;
+  --linha: #d8dee4;
+  --suave: #5a6772;
+  --verde: #1b7a4b;
+  --vermelho: #b3261e;
+
+  --bs-body-font-family: 'Archivo', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --bs-body-bg: var(--papel);
+  --bs-body-color: var(--asfalto);
+  --bs-border-color: var(--linha);
+  --bs-link-color: var(--azul);
+  --bs-link-hover-color: var(--azul-escuro);
+}
+
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; min-width: 0; } /* sem isso a tabela larga estica a página inteira no celular */
+h1 { font-size: 1.9rem; font-weight: 800; font-stretch: 88%; letter-spacing: -0.01em; margin: 0 0 .15rem; }
+:focus-visible { outline: 3px solid var(--faixa); outline-offset: 2px; }
+
+.btn-marca {
+  --bs-btn-color: #fff; --bs-btn-bg: var(--azul); --bs-btn-border-color: var(--azul);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--azul-escuro); --bs-btn-hover-border-color: var(--azul-escuro);
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: var(--azul-escuro); --bs-btn-active-border-color: var(--azul-escuro);
+  --bs-btn-disabled-bg: var(--azul); --bs-btn-disabled-border-color: var(--azul);
+  --bs-btn-focus-shadow-rgb: 15, 76, 129; font-weight: 600;
+}
+
+/* ---------- Topo, com a faixa tracejada da pista ---------- */
+.topo { background: var(--asfalto); }
+.topo .navbar { padding-block: .65rem; }
+.marca { display: inline-flex; align-items: center; gap: .6rem; color: #fff; font-size: 1.4rem; font-weight: 800; font-stretch: 85%; text-decoration: none; }
+.marca:hover { color: #fff; }
+.marca-placa {
+  display: inline-block; padding: .12rem .45rem; border-top: .35rem solid var(--azul);
+  background: #fff; color: var(--asfalto); border-radius: 4px; font-size: .8rem; font-weight: 800; letter-spacing: .08em; line-height: 1.1;
+}
+.topo .nav-link { color: #c3ccd4; font-weight: 500; }
+.topo .nav-link:hover { color: #fff; }
+.topo .nav-link[aria-current='page'] { color: #fff; box-shadow: inset 0 -3px 0 var(--faixa); }
+.topo .navbar-toggler { border-color: rgba(255,255,255,.4); }
+.topo .navbar-toggler-icon { filter: invert(1); }
+.faixa { height: 6px; background: repeating-linear-gradient(90deg, var(--faixa) 0 28px, transparent 28px 44px); }
+.api-status { font-size: .85rem; color: #c3ccd4; }
+.api-status::before { content: ''; display: inline-block; width: .55rem; height: .55rem; margin-right: .4rem; border-radius: 50%; background: #8793a0; }
+.api-status.conectada::before { background: #46c37b; }
+.api-status.desconectada::before { background: #ff6b60; }
+
+/* ---------- Telas ---------- */
+.tela-cabecalho { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: .75rem; margin-bottom: 1.1rem; }
+.filtros { padding: .85rem; margin: 0 0 .5rem; background: #fff; border: 1px solid var(--linha); border-radius: 10px; }
+.filtros .form-label { font-size: .8rem; color: var(--suave); font-weight: 500; }
+.consulta-rota { min-height: 1.4rem; margin: 0 0 .5rem; font-size: .8rem; color: var(--suave); }
+.consulta-rota code, .rodape code { color: var(--azul-escuro); background: #e6eef6; padding: .08rem .35rem; border-radius: 4px; word-break: break-all; }
+.contagem { margin: 0 0 .4rem; font-size: .85rem; color: var(--suave); }
+
+.tabela-caixa { background: #fff; border: 1px solid var(--linha); border-radius: 10px; overflow-x: auto; position: relative; }
+.tabela-caixa.rolagem { max-height: 26rem; overflow-y: auto; }
+.table { --bs-table-bg: transparent; }
+.table thead th { background: #eef2f5; font-size: .82rem; font-weight: 600; color: var(--suave); border-bottom: 1px solid var(--linha); white-space: nowrap; }
+.table td, .table th { padding: .65rem .8rem; }
+.table tfoot th, .table tfoot td { background: #eef2f5; font-weight: 700; }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.table .sub { display: block; margin-top: .1rem; font-size: .8rem; color: var(--suave); font-weight: 400; }
+.acoes { white-space: nowrap; }
+.ordenar { padding: 0; border: 0; background: none; font: inherit; color: inherit; font-weight: 600; cursor: pointer; }
+.ordenar:hover { color: var(--azul); }
+
+.estado-vazio { padding: 2.2rem 1rem; text-align: center; background: #fff; border: 1px dashed var(--linha); border-radius: 10px; }
+
+/* Placa: o detalhe marcante (faixa azul no topo, como na placa Mercosul) */
+.placa {
+  display: inline-block; padding: .05rem .45rem; border-top: .28rem solid var(--azul);
+  background: #fff; border-left: 1px solid #aeb8c2; border-right: 1px solid #aeb8c2; border-bottom: 1px solid #aeb8c2;
+  border-radius: 4px; font-weight: 800; font-stretch: 80%; letter-spacing: .1em; font-size: .85rem; color: var(--asfalto);
+}
+
+.selo { display: inline-block; padding: .15rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 600; white-space: nowrap; }
+.selo-ok { background: #ddf1e6; color: #12603a; }
+.selo-uso { background: #dce9f6; color: #0b3a63; }
+.selo-manut { background: #fdeccb; color: #7a4d00; }
+.selo-atraso { background: #fadcd9; color: #8a1c15; }
+
+/* ---------- Painel ---------- */
+.resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .75rem; }
+.numero { display: flex; flex-direction: column; padding: .9rem 1rem; background: #fff; border: 1px solid var(--linha); border-left: 5px solid var(--faixa); border-radius: 10px; color: inherit; text-decoration: none; }
+.numero:hover { border-color: var(--azul); border-left-color: var(--faixa); }
+.numero-valor { font-size: 2rem; font-weight: 800; font-stretch: 78%; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.numero-rotulo { font-size: .85rem; color: var(--suave); }
+.secao-titulo { font-size: 1.15rem; font-weight: 700; padding-bottom: .4rem; margin-bottom: .75rem; border-bottom: 1px solid var(--linha); }
+.barra { height: 5px; margin-top: .3rem; background: #e3e9ee; border-radius: 3px; overflow: hidden; }
+.barra span { display: block; height: 100%; background: var(--azul); }
+
+/* ---------- Avisos, rodapé ---------- */
+.toast-aviso { color: #fff; }
+.toast-sucesso { background: var(--azul-escuro); }
+.toast-erro { background: #8f1d1d; }
+.form-label { font-weight: 500; }
+.rodape { margin-top: 3rem; padding: 1.4rem 0; background: var(--asfalto); color: #b9c3cc; font-size: .875rem; }
+.rodape code { background: rgba(255,255,255,.1); color: #fff; }
+
+@media (max-width: 767.98px) {
+  h1 { font-size: 1.5rem; }
+  .acoes { white-space: normal; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

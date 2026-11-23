@@ -20,7 +20,7 @@ public class VeiculosController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<VeiculoReadDto>>> GetAll()
     {
-        var veiculos = await QueryComNomes().OrderBy(v => v.Modelo).ToListAsync();
+        var veiculos = (await QueryComNomes().ToListAsync()).OrderBy(v => v.Modelo).ToList();
         return Ok(veiculos);
     }
 

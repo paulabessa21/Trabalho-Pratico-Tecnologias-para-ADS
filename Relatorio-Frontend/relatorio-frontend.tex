@@ -1,0 +1,140 @@
+% Relatório do Trabalho Prático 2 — Front-end da Locadora de Veículos
+% Modelo SBC: baixe sbc-template.sty e sbc-template.bst em https://www.sbc.org.br/documentos-da-sbc/
+% (ou use o projeto "SBC Conference Template" do Overleaf) e coloque na mesma pasta deste arquivo.
+\documentclass[12pt]{article}
+
+\usepackage{sbc-template}
+\usepackage{graphicx,url}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs,array}
+
+\sloppy
+
+% Mostra a figura se o arquivo existir; senão, uma caixa avisando para inserir o print.
+\newcommand{\figura}[3]{%
+  \begin{figure}[ht]\centering
+  \IfFileExists{figuras/#1}{\includegraphics[width=\textwidth]{figuras/#1}}%
+  {\fbox{\parbox{0.9\textwidth}{\centering\vspace{1.5cm}\textbf{[inserir print: figuras/#1]}\vspace{1.5cm}}}}
+  \caption{#2}\label{#3}
+  \end{figure}}
+
+\title{Locadora de Veículos: front-end web integrado à API}
+
+\author{Paula Bessa\inst{1}}
+
+\address{Pontifícia Universidade Católica de Minas Gerais (PUC Minas)\\
+  Belo Horizonte -- MG -- Brasil
+  \email{paulabessa566@gmail.com}
+}
+
+\begin{document}
+
+\maketitle
+
+\section{O problema}
+
+Uma locadora de veículos precisa controlar a frota, os clientes e os aluguéis: quais carros estão
+disponíveis, quem está com qual veículo, quando ele deve voltar e quanto cada cliente já gerou de
+faturamento. No Trabalho Prático~1 foi construída a API que guarda e consulta esses dados
+(C\#, ASP.NET Core, Entity Framework e SQL Server Express). Faltava uma interface para que um
+atendente use o sistema sem precisar do Swagger. Este trabalho entrega esse front-end, que consome
+as rotas reais da API, sem dados fixos no código.
+
+\section{Modelagem adotada}
+
+O banco tem cinco entidades: \textbf{Fabricante}, \textbf{Categoria}, \textbf{Veículo},
+\textbf{Cliente} e \textbf{Aluguel}. Um fabricante e uma categoria têm vários veículos; um cliente e
+um veículo têm vários aluguéis. A categoria guarda a diária base. O aluguel guarda as datas de
+retirada, devolução prevista e devolução, a quilometragem inicial e final, o valor da diária e o
+valor total, calculado na devolução. O veículo tem situação: Disponível, Alugado ou Manutenção.
+O código e o relatório da API estão no repositório do Trabalho Prático~1 (\url{https://github.com/paulabessa21/Trabalho-Pratico-Tecnologias-para-ADS}).
+
+\section{Arquitetura do front-end}
+
+O front-end fica na pasta \texttt{Frontend/} do mesmo repositório. É feito com HTML, CSS (Bootstrap~5)
+e JavaScript puro, sem etapa de build. A comunicação com a API usa somente \texttt{fetch}, em um único
+arquivo (\texttt{js/api.js}) que também traduz os erros da API (400, 404, 409 e 500) em mensagens
+para o usuário. As telas são descritas em \texttt{js/entidades.js} e desenhadas por um motor comum
+(\texttt{js/crud.js}), o que mantém o mesmo comportamento de lista, filtro, formulário e exclusão
+em todas as entidades. Para o navegador poder chamar a API em outro endereço, foi acrescentada à
+\texttt{Program.cs} uma política de CORS.
+
+\section{Wireframes}
+
+Os wireframes foram feitos em média fidelidade, em tons de cinza, antes da implementação. As Figuras
+\ref{fig:w1} a \ref{fig:w6} mostram as seis telas. Link do projeto no Figma: \textbf{[colar o link compartilhável aqui]}.
+
+\figura{wireframe-01-painel.png}{Painel com resumo e duas consultas da API.}{fig:w1}
+\figura{wireframe-02-lista-veiculos.png}{Lista de veículos com filtros.}{fig:w2}
+\figura{wireframe-03-modal-veiculo.png}{Formulário de cadastro e edição em modal.}{fig:w3}
+\figura{wireframe-04-clientes.png}{Lista de clientes com filtros.}{fig:w4}
+\figura{wireframe-05-alugueis.png}{Lista de aluguéis, filtros e registro de devolução.}{fig:w5}
+\figura{wireframe-06-devolucao-exclusao.png}{Modais de devolução e de confirmação de exclusão.}{fig:w6}
+
+\section{Funcionalidades e rotas utilizadas}
+
+A Tabela~\ref{tab:rotas} relaciona cada tela às rotas da API e aos filtros oferecidos. Todas as
+entidades têm cadastro, edição (exceto aluguéis, que na API só têm criação, devolução e exclusão),
+exclusão com confirmação e pesquisa com filtros em pelo menos dois campos.
+
+\begin{table}[ht]
+\centering\small
+\footnotesize
+\begin{tabular}{p{1.7cm}p{4.7cm}p{5.0cm}}
+\toprule
+Tela & Rotas & Filtros \\
+\midrule
+Veículos & GET/POST \path{/api/veiculos}; PUT/DELETE \path{/{id}}; GET \path{/disponiveis}; GET \path{/com-total-alugueis} & modelo ou placa, situação, categoria, fabricante, ano; ``só disponíveis'' usa a rota \path{/disponiveis} \\
+Clientes & GET/POST \path{/api/clientes}; PUT/DELETE \path{/{id}}; GET \path{/sem-aluguel} & nome, CPF, e-mail; ``sem aluguel'' usa a rota \path{/sem-aluguel} \\
+Aluguéis & GET/POST \path{/api/alugueis}; PATCH \path{/{id}/devolucao}; DELETE \path{/{id}}; GET \path{/em-aberto} & texto, cliente, situação, período de retirada; ``em aberto'' usa \path{/em-aberto?clienteId=} \\
+Fabricantes & GET/POST \path{/api/fabricantes}; PUT/DELETE \path{/{id}} & nome, código \\
+Categorias & GET/POST \path{/api/categorias}; PUT/DELETE \path{/{id}} & nome, diária mínima e máxima \\
+Painel & GET \path{/api/alugueis/faturamento-por-periodo}; GET \path{/api/veiculos/com-total-alugueis}; GET \path{/api/alugueis/em-aberto} & período do faturamento \\
+\bottomrule
+\end{tabular}
+\caption{Telas, rotas e filtros.}\label{tab:rotas}
+\end{table}
+
+\subsection{Duas consultas, do banco ao front-end}
+
+\textbf{Consulta 1: faturamento por cliente.} A rota \texttt{GET /api/alugueis/faturamento-por-periodo}
+faz um \texttt{INNER JOIN} entre aluguéis e clientes, agrupa por cliente e soma o valor dos aluguéis
+devolvidos no período. O painel envia \texttt{dataInicio} e \texttt{dataFim} e mostra o resultado em
+tabela, com o total. \textbf{[inserir print com os dados reais: figuras/tela-painel.png]}
+
+\textbf{Consulta 2: veículos com total de aluguéis.} A rota \texttt{GET /api/veiculos/com-total-alugueis}
+usa um \texttt{LEFT JOIN} com agrupamento, e por isso lista também os veículos que nunca foram alugados
+(total zero). O painel mostra cada veículo com uma barra proporcional ao total.
+
+\figura{tela-painel.png}{Painel da aplicação com dados reais.}{fig:painel}
+\figura{tela-veiculos.png}{Lista de veículos com filtro ``só disponíveis''.}{fig:veiculos}
+\figura{tela-alugueis.png}{Aluguéis em aberto e registro de devolução.}{fig:alugueis}
+
+\section{Regras de negócio refletidas na interface}
+
+\begin{itemize}
+  \item Ao criar um aluguel, a lista de veículos mostra só os disponíveis; a quilometragem inicial e a
+        diária são sugeridas a partir do veículo escolhido e da sua categoria.
+  \item A devolução só aceita quilometragem final maior ou igual à inicial. A API calcula o valor total e
+        libera o veículo.
+  \item Excluir fabricante, categoria, cliente ou veículo em uso retorna erro 409 da API, e a mensagem
+        aparece na própria janela de confirmação.
+  \item Campos têm validação no navegador (CPF com 11 dígitos, placa no padrão antigo ou Mercosul, e-mail)
+        e a API continua validando.
+\end{itemize}
+
+\section{Como executar}
+
+Com o SQL Server Express ativo, execute \texttt{dotnet run} na pasta do backend (a API sobe em
+\texttt{http://localhost:5202}) e abra \texttt{Frontend/index.html} no navegador. Se a porta for outra,
+altere \texttt{API\_URL} em \texttt{Frontend/js/config.js}.
+
+\section{Conclusão}
+
+O front-end cobre todas as funcionalidades projetadas no Trabalho Prático~1 e usa as rotas da Etapa~3.
+O ponto que mais exigiu cuidado foi traduzir os erros da API (validação, conflito e falha de servidor)
+em mensagens claras para quem usa o sistema.
+
+\end{document}

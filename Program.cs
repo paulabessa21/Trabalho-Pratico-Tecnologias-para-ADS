@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Controllers + validação automática dos DataAnnotations dos DTOs
 builder.Services.AddControllers();
 
+// CORS: permite que o front-end (pasta Frontend/), aberto em outro endereço/porta,
+// chame esta API pelo navegador usando fetch (Trabalho Prático 2)
+builder.Services.AddCors(options =>
+    options.AddPolicy("Frontend", policy =>
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 // Banco de dados (SQL Server Express), via Entity Framework
 builder.Services.AddDbContext<LocadoraDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Locadora")));
@@ -36,7 +42,12 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // Swagger abre direto na raiz: https://localhost:xxxx/
 });
 
-app.UseHttpsRedirection();
+// Em desenvolvimento o front chama a API por http://localhost:5202; o redirecionamento
+// para https quebraria o fetch (CORS), então ele só vale fora do ambiente de desenvolvimento
+if (!app.Environment.IsDevelopment())
+    app.UseHttpsRedirection();
+
+app.UseCors("Frontend");
 app.UseAuthorization();
 app.MapControllers();
 

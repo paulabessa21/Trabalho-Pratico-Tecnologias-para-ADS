@@ -20,7 +20,7 @@ public class AlugueisController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AluguelReadDto>>> GetAll()
     {
-        var alugueis = await QueryComNomes().OrderByDescending(a => a.DataRetirada).ToListAsync();
+        var alugueis = (await QueryComNomes().ToListAsync()).OrderByDescending(a => a.DataRetirada).ToList();
         return Ok(alugueis);
     }
 

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Locadora de Veículos — Painel</title>
+  <meta name="description" content="Front-end da Locadora de Veículos: veículos, clientes, aluguéis, fabricantes e categorias.">
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+  <header class="topo">
+    <nav class="navbar navbar-expand-lg" aria-label="Principal">
+      <div class="container-xl">
+        <a class="marca" href="#painel">
+          <span class="marca-placa" aria-hidden="true">LOC</span>
+          Locadora
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+          <ul class="navbar-nav ms-lg-4 gap-lg-1" id="menu-itens"></ul>
+          <span class="ms-lg-auto api-status" id="api-status" role="status">Conectando à API…</span>
+        </div>
+      </div>
+    </nav>
+    <div class="faixa" aria-hidden="true"></div>
+  </header>
+
+  <main class="container-xl py-4" id="tela" tabindex="-1"></main>
+
+  <footer class="rodape">
+    <div class="container-xl">
+      Trabalho Prático 2 — Tecnologias para ADS · Front-end integrado à API da Locadora (rotas <code>/api/...</code>)
+    </div>
+  </footer>
+
+  <!-- Modal: formulário de cadastro/edição (usado por todas as entidades) -->
+  <div class="modal fade" id="modal-form" tabindex="-1" aria-labelledby="modal-form-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <form class="modal-content" id="form" novalidate>
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modal-form-titulo"></h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="form-erro" class="alert alert-danger d-none" role="alert"></div>
+          <div id="form-campos" class="row g-3"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-marca" id="form-salvar">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: confirmação de exclusão -->
+  <div class="modal fade" id="modal-excluir" tabindex="-1" aria-labelledby="modal-excluir-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="modal-excluir-titulo">Confirmar exclusão</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <div id="excluir-erro" class="alert alert-danger d-none" role="alert"></div>
+          <p class="mb-1" id="excluir-texto"></p>
+          <p class="mb-0 text-body-secondary">Essa ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="excluir-confirmar">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="avisos" aria-live="polite"></div>
+
+  <script src="vendor/bootstrap.bundle.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/util.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/crud.js"></script>
+  <script src="js/entidades.js"></script>
+  <script src="js/painel.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
